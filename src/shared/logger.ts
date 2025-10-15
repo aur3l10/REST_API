@@ -1,4 +1,7 @@
 import pino from 'pino';
 import config from '../config/config';
 
-export default pino({ level: config.LOG_LEVEL });
+export default pino({
+  level: config.LOG_LEVEL,
+  timestamp: pino.stdTimeFunctions.isoTime,
+});

@@ -2,6 +2,6 @@ import pino from 'pino';
 import config from '../config/config';
 
 export default pino({
-  level: config.LOG_LEVEL,
+  level: config.log.LOG_LEVEL,
   timestamp: pino.stdTimeFunctions.isoTime,
 });

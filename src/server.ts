@@ -2,8 +2,8 @@ import app from './app';
 import config from './config/config';
 import logger from './shared/logger';
 
-const server = app.listen(config.PORT, () => {
-  logger.info(`Server running on port ${config.PORT}`);
+const server = app.listen(config.app.PORT, () => {
+  logger.info(`Server running on port ${config.app.PORT}`);
 });
 
 process.on('SIGTERM', () => {

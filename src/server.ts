@@ -7,14 +7,14 @@ const server = app.listen(config.app.PORT, () => {
 });
 
 process.on('SIGTERM', () => {
-  logger.info('SIGTERM signal received: closing HTTP server');
+  logger.fatal('SIGTERM signal received: closing HTTP server');
   server.close(() => {
     logger.info('HTTP server closed');
   });
 });
 
 process.on('SIGINT', () => {
-  logger.info('SIGINT signal received: closing HTTP server');
+  logger.fatal('SIGINT signal received: closing HTTP server');
   server.close(() => {
     logger.info('HTTP server closed');
   });

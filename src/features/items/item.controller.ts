@@ -1,16 +1,14 @@
 import type { Request, Response } from 'express';
-import prisma from '../../db/prisma';
-import { ItemsSchema } from './item.model';
+import itemService from './item.service';
 
 function itemController() {
-  // TODO: add error management
   const getItems = async (_req: Request, res: Response) => {
-    const items = await prisma.item.findMany({
-      take: 10,
-    });
-    const itemValidated = ItemsSchema.parse(items);
-
-    res.json(itemValidated);
+    try {
+      const items = await itemService.getItems();
+      res.json(items);
+    } catch (error) {
+      res.status(500).json({ message: (error as Error).message });
+    }
   };
 
   return { getItems };

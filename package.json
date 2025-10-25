@@ -6,10 +6,12 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "npx supabase start && npm run prisma:local && nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "npm run prisma:local && nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "prisma:local": "dotenv -e .env.local -- prisma generate",
     "migrate:local": "dotenv -e .env.local -- prisma migrate dev",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "eslint 'src/**/*.ts'",
+    "supabase:start": "npx supabase start",
+    "supabase:stop": "npx supabase stop"
   },
   "keywords": [],
   "author": "",

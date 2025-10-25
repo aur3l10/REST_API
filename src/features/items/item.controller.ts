@@ -1,4 +1,6 @@
 import type { Request, Response } from 'express';
+import logger from '../../shared/logger';
+import { ItemSchema } from './item.model';
 import itemService from './item.service';
 
 /**
@@ -11,6 +13,7 @@ import itemService from './item.service';
  * @returns {{ getAll: (req: Request, res: Response) => Promise<void> }} Controller handlers.
  */
 function itemController() {
+  const childLogger = logger.child({ resource: 'itemController' });
   /**
    * GET /api/items
    *
@@ -26,7 +29,27 @@ function itemController() {
     }
   };
 
-  return { getAll };
+  async function create(req: Request, res: Response) {
+    const itemValidated = ItemSchema.safeParse(req.body);
+
+    if (!itemValidated.success) {
+      childLogger.error(
+        { method: 'create' },
+        `Invalid item data: ${itemValidated.error.message}`
+      );
+      res.status(400).json({ message: itemValidated.error.message });
+      return;
+    }
+
+    try {
+      const item = await itemService.create(itemValidated.data);
+      res.status(201).json(item);
+    } catch (_) {
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  return { getAll, create };
 }
 
 export default itemController();

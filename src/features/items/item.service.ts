@@ -1,5 +1,5 @@
 import logger from '../../shared/logger';
-import { ItemsSchema } from './item.model';
+import { Item, ItemSchema, ItemsSchema } from './item.model';
 import itemRepository from './item.repository';
 
 /**
@@ -24,7 +24,7 @@ function itemService() {
    * @returns {Promise<import('./item.model').Item[]>} Array of validated items.
    * @throws {Error} When validation fails.
    */
-  async function getAll(): Promise<import('./item.model').Item[]> {
+  async function getAll() {
     const items = await itemRepository.getAll();
     const itemValidated = ItemsSchema.safeParse(items);
 
@@ -39,7 +39,28 @@ function itemService() {
     return itemValidated.data;
   }
 
-  return { getAll };
+  async function create(data: Item) {
+    try {
+      const itemFromDb = await itemRepository.create(data);
+
+      const itemValidated = ItemSchema.safeParse(itemFromDb);
+
+      if (!itemValidated.success) {
+        childLogger.error(
+          { method: 'create' },
+          `Invalid item data from DB: ${itemValidated.error.message}`
+        );
+        throw new Error(itemValidated.error.message);
+      }
+
+      return itemValidated.data;
+    } catch (_) {
+      childLogger.error({ method: 'create' }, `Error creating item in DB`);
+      throw new Error('Error creating item');
+    }
+  }
+
+  return { getAll, create };
 }
 
 export default itemService();

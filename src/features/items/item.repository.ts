@@ -1,5 +1,6 @@
 import prisma from '../../db/prisma';
 import logger from '../../shared/logger';
+import { Item } from './item.model';
 
 /**
  * Item repository factory.
@@ -30,7 +31,21 @@ function itemRepository() {
     }
   }
 
-  return { getAll };
+  async function create({ name, description }: Item) {
+    try {
+      return await prisma.item.create({
+        data: {
+          name,
+          description,
+        },
+      });
+    } catch (_) {
+      childLogger.error({ method: 'create' }, 'Database error');
+      throw new Error('Database error');
+    }
+  }
+
+  return { getAll, create };
 }
 
 export default itemRepository();

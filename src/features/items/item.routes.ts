@@ -11,5 +11,6 @@ const router = Router();
 
 // GET /api/items
 router.get('/', itemController.getAll);
+router.post('/', itemController.create);
 
 export default router;

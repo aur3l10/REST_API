@@ -8,12 +8,12 @@ import logger from '../../shared/logger';
  * The repository logs errors and throws a generic Error on DB failures to avoid leaking
  * implementation details to higher layers.
  *
- * @returns {{ getItems: function(): Promise<import('@prisma/client').Item[]> }} An object with data-access methods.
+ * @returns {{ getAll: function(): Promise<import('@prisma/client').Item[]> }} An object with data-access methods.
  */
 function itemRepository() {
   const childLogger = logger.child({ resource: 'itemRepository' });
 
-  async function getItems() {
+  async function getAll() {
     /**
      * Retrieve up to 10 items from the database.
      *
@@ -25,12 +25,12 @@ function itemRepository() {
         take: 10,
       });
     } catch (_) {
-      childLogger.error({ method: 'getItems' }, 'Database error');
+      childLogger.error({ method: 'getAll' }, 'Database error');
       throw new Error('Database error');
     }
   }
 
-  return { getItems };
+  return { getAll };
 }
 
 export default itemRepository();

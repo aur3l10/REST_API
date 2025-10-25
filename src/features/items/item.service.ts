@@ -9,7 +9,7 @@ import itemRepository from './item.repository';
  * raw data from the repository using Zod schemas and returns validated shapes
  * to the controller layer.
  *
- * @returns {{ getItems: function(): Promise<import('./item.model').Item[]> }} Service methods.
+ * @returns {{ getAll: function(): Promise<import('./item.model').Item[]> }} Service methods.
  */
 function itemService() {
   const childLogger = logger.child({ resource: 'itemService' });
@@ -24,13 +24,13 @@ function itemService() {
    * @returns {Promise<import('./item.model').Item[]>} Array of validated items.
    * @throws {Error} When validation fails.
    */
-  async function getItems() {
-    const items = await itemRepository.getItems();
+  async function getAll(): Promise<import('./item.model').Item[]> {
+    const items = await itemRepository.getAll();
     const itemValidated = ItemsSchema.safeParse(items);
 
     if (!itemValidated.success) {
       childLogger.error(
-        { method: 'getItems' },
+        { method: 'getAll' },
         `Invalid item data from DB: ${itemValidated.error.message}`
       );
       throw new Error(itemValidated.error.message);
@@ -39,7 +39,7 @@ function itemService() {
     return itemValidated.data;
   }
 
-  return { getItems };
+  return { getAll };
 }
 
 export default itemService();

@@ -10,6 +10,6 @@ import itemController from './item.controller';
 const router = Router();
 
 // GET /api/items
-router.get('/', itemController.getItems);
+router.get('/', itemController.getAll);
 
 export default router;

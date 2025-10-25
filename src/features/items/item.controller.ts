@@ -8,7 +8,7 @@ import itemService from './item.service';
  * translate results into HTTP responses. Errors from the service are returned
  * as 500 responses with a generic message.
  *
- * @returns {{ getItems: (req: Request, res: Response) => Promise<void> }} Controller handlers.
+ * @returns {{ getAll: (req: Request, res: Response) => Promise<void> }} Controller handlers.
  */
 function itemController() {
   /**
@@ -17,16 +17,16 @@ function itemController() {
    * Returns validated items as JSON. On error returns HTTP 500 with
    * { message }.
    */
-  const getItems = async (_req: Request, res: Response) => {
+  const getAll = async (_req: Request, res: Response) => {
     try {
-      const items = await itemService.getItems();
+      const items = await itemService.getAll();
       res.json(items);
     } catch (error) {
       res.status(500).json({ message: (error as Error).message });
     }
   };
 
-  return { getItems };
+  return { getAll };
 }
 
 export default itemController();
